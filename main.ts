@@ -14,6 +14,13 @@ const outputDir = process.env.OUTPUT_DIR ?? "/output";
 if (JOKE.length < 1 || JOKE.length > 200) {
   throw new Error(`Joke must be 1-200 characters, got ${JOKE.length}.`);
 }
+// Count code points, not UTF-16 units, so an astral character counts once.
+if ([...JOKE].length > 200) {
+  throw new Error(`Joke must be at most 200 characters, got ${[...JOKE].length}.`);
+}
+if (JOKE.includes("\n") || JOKE.includes("\r")) {
+  throw new Error("Joke must be a single line with no line breaks.");
+}
 if (JOKE.trim().length === 0) {
   throw new Error("Joke must not be only whitespace.");
 }
